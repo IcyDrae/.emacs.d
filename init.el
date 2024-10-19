@@ -16,6 +16,13 @@
  '(package-selected-packages '(evil))
  '(tab-bar-mode t))
 
+(setq display-time-day-and-date t)
+(setq display-time-format "%A, %d %B %Y, %H:%M")
+(display-time-mode 1)
+(setq display-time-24hr-format t)
+
+(setq scroll-conservatively 101)
+
 ;; Disable startup message
 (setq inhibit-startup-message t)
 ;; Set default directory

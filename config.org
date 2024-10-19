@@ -14,6 +14,7 @@
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#hide-org-indent][Hide org-indent]]
+  - [[#org-pomodoro][org-pomodoro]]
 - [[#theme][Theme]]
 - [[#rainbow-mode][rainbow-mode]]
 - [[#icons][Icons]]
@@ -32,6 +33,7 @@
 - [[#elfeed][elfeed]]
 - [[#minibuffer-escape-one-time][Minibuffer escape one time]]
 - [[#sane-defaults][Sane defaults]]
+- [[#multimedia][Multimedia]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -172,6 +174,38 @@ Org-bullets gives us attractive bullets rather than asterisks.
 
 #+begin_src emacs-lisp
   (eval-after-load 'org-indent '(diminish 'org-indent-mode))
+#+end_src
+
+** org-pomodoro
+
+#+begin_src emacs-lisp
+  (use-package sound-wav
+    :ensure t)
+
+  (use-package powershell
+    :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package org-pomodoro
+     :config
+    (setq org-pomodoro-ask-for-notes t)  ;; Ask for notes after each session
+    (setq org-pomodoro-log 'note)  ;; Logs a note with each Pomodoro session
+    (setq org-pomodoro-finished-sound-p t)  ;; Enables the sound after a Pomodoro session
+    (setq org-pomodoro-ticking-sound nil)  ;; Optional: Disable ticking sound if you don't want it
+    (setq org-pomodoro-finished-sound "C:/Users/rgj/.emacs.d/pomodoro-bell.wav")
+    (setq org-pomodoro-short-break-sound "C:/Users/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-long-break-sound "C:/Users/rgj/.emacs.d/break-over-sound.wav")
+
+    ;; Set the default times (optional)
+    (setq org-pomodoro-length 50)  ;; Length of each Pomodoro session (in minutes)
+    (setq org-pomodoro-short-break-length 10)  ;; Short break (in minutes)
+    (setq org-pomodoro-long-break-length 20)  ;; Long break (in minutes)
+    (setq org-pomodoro-long-break-frequency 4)  ;; Long break after every 4 sessions
+
+    (setq org-clock-persist 'history)  ;; Saves clock history between Emacs sessions
+    (org-clock-persistence-insinuate)  ;; Ensures that your clocks are persisted
+  )
 #+end_src
 
 * Theme
@@ -514,7 +548,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
     :config
     (setq neo-smart-open t
           neo-show-hidden-files t
-          neo-window-width 55
+          neo-window-width 40
           neo-window-fixed-size nil
           inhibit-compacting-font-caches t
           projectile-switch-project-action 'neotree-projectile-action) 
@@ -593,6 +627,92 @@ The following settings are simple modes that are enabled (or disabled) so that E
   ;(scroll-bar-mode -1)         ;; Disable the scroll bar
   ;(tool-bar-mode -1)           ;; Disable the tool bar
   ;(setq org-edit-src-content-indentation 0) ;; Set src block automatic indent to 0 instead of 2.
+#+end_src
+
+#+begin_src emacs-lisp
+    ; Open an empty new tab when creating new tabs.
+  (defun open-new-tab-with-neotree ()
+    "Open a new tab and display Neotree at the E: drive."
+    (interactive)
+    (tab-new)  ;; Open a new tab
+    (switch-to-buffer "*scratch*")
+    (neotree-dir "E:/"))  ;; Show Neotree with E: drive
+
+  ;; Rebind C-x t 2 to open the new tab with Neotree
+  (global-set-key (kbd "C-x t 2") 'open-new-tab-with-neotree)
+#+end_src
+
+* Multimedia
+
+#+begin_src emacs-lisp
+  (require 'url)
+
+  (defun vlc-start ()
+    "Start VLC with HTTP interface and dummy interface."
+    (interactive)
+    (start-process "vlc" "*vlc*" "vlc" "-I" "dummy" "--extraintf" "http"
+                   "--http-host" "127.0.0.1" "--http-port" "8080"
+                   "--http-password" "1234"))
+
+  (defvar vlc-current-file nil
+    "The currently playing file in VLC.")
+
+  (defun encode-url (str)
+    "URL-encode a string STR for use in a URL."
+    ;; Use built-in url-encode-url if available, or just handle spaces
+    (let ((encoded (replace-regexp-in-string " " "%20" str))) 
+      ;; Encode additional special characters
+      (replace-regexp-in-string "&" "%26" 
+      (replace-regexp-in-string "?" "%3F" 
+      (replace-regexp-in-string "=" "%3D" 
+      (replace-regexp-in-string "+" "%2B" encoded))))))
+
+  (defun vlc-play-file (file)
+    "Play a media FILE using VLC."
+    (interactive (list (read-file-name "Select file: " "E:/data/audio/music/")))
+    (let* ((encoded-file (encode-url (expand-file-name file)))
+           (short-title (if (> (length (file-name-nondirectory file)) 10)
+                            (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
+                          (file-name-nondirectory file)))) ; If it's 10 characters or less, use the full name
+      (setq vlc-current-file short-title) ; Update the currently playing file variable
+                                          ; (message "Playing file with URL: %s" (format "http://localhost:8080/requests/status.xml?command=in_play&input=file:///%s" encoded-file))
+      (start-process "curl" nil "curl" "-u" ":1234" (format "http://localhost:8080/requests/status.xml?command=in_play&input=file:///%s" encoded-file))
+      (update-vlc-mode-line)
+  ))
+
+  (defun update-vlc-mode-line ()
+    (let ((new-info (if vlc-current-file
+                        (format "▶ %s" vlc-current-file)
+                      "")))
+      ;; Replace the last entry in mode-line-format with the new VLC info
+      (setf (nth (1- (length mode-line-format)) mode-line-format) new-info)))
+
+  (defun vlc-pause ()
+    (interactive)
+    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_pause"))
+
+  (defun vlc-resume ()
+    (interactive)
+    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_play"))
+
+  (defun vlc-stop ()
+    (interactive)
+    (setq vlc-current-file nil) ;; Clear the current file info
+    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_stop")
+    (update-vlc-mode-line)
+  )
+
+  (defun vlc-volume (level)
+    "Set VLC volume to LEVEL (0-512)."
+    (interactive "nVolume Level (0-512): ")
+    (let ((url (format "http://localhost:8080/requests/status.xml?command=volume&val=%d" level)))
+      (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
+
+  (defun vlc-status ()
+    "Get the current status of VLC."
+    (interactive)
+    (let ((url "http://localhost:8080/requests/status.xml"))
+      (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
 #+end_src
 
 

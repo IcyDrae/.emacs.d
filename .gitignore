@@ -6,3 +6,5 @@ url/
 config.el
 projectile-bookmarks.eld
 recentf
+org-clock-save.el
+
