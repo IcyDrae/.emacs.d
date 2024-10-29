@@ -2,9 +2,11 @@ auto-save-list/
 elpa/
 elpaca/
 eshell/history
+eshell/lastdir
 url/
 config.el
 projectile-bookmarks.eld
 recentf
 org-clock-save.el
+speed-type/
 

@@ -34,6 +34,8 @@
 - [[#minibuffer-escape-one-time][Minibuffer escape one time]]
 - [[#sane-defaults][Sane defaults]]
 - [[#multimedia][Multimedia]]
+- [[#touch-typing][Touch typing]]
+- [[#chronometer][chronometer]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -575,36 +577,44 @@ By default, Emacs creates automatic backups of files in their original directori
 An RSS newsfeed reader for Emacs. Move through the articles with 'j/k'. Move through the stories with 'CTRL j/k' when in other frame.
 
 #+begin_src emacs-lisp
-(use-package elfeed
-  :config
-  (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
-        elfeed-feeds (quote
-                       (("https://www.reddit.com/r/linux.rss" reddit linux)
-                        ("https://www.reddit.com/r/commandline.rss" reddit commandline)
-                        ("https://www.reddit.com/r/distrotube.rss" reddit distrotube)
-                        ("https://www.reddit.com/r/emacs.rss" reddit emacs)
-                        ("https://www.gamingonlinux.com/article_rss.php" gaming linux)
-                        ("https://hackaday.com/blog/feed/" hackaday linux)
-                        ("https://opensource.com/feed" opensource linux)
-                        ("https://linux.softpedia.com/backend.xml" softpedia linux)
-                        ("https://itsfoss.com/feed/" itsfoss linux)
-                        ("https://www.zdnet.com/topic/linux/rss.xml" zdnet linux)
-                        ("https://www.phoronix.com/rss.php" phoronix linux)
-                        ("http://feeds.feedburner.com/d0od" omgubuntu linux)
-                        ("https://www.computerworld.com/index.rss" computerworld linux)
-                        ("https://www.networkworld.com/category/linux/index.rss" networkworld linux)
-                        ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
-                        ("https://betanews.com/feed" betanews linux)
-                        ("http://lxer.com/module/newswire/headlines.rss" lxer linux)
-                        ("https://distrowatch.com/news/dwd.xml" distrowatch linux)))))
- 
+  ;; Function to fetch full text using curl
+  (defun elfeed-fetch-full-text ()
+    "Fetch full text for the current Elfeed entry using curl."
+    (interactive)
+    (let* ((entry-link (elfeed-entry-link elfeed-show-entry))  ;; Get the link of the current entry
+           (command (format "curl -s %s" entry-link))  ;; Curl command to fetch the article
+           (full-text (shell-command-to-string command)))  ;; Fetch the full text
+      (with-current-buffer (get-buffer-create "*elfeed-entry-full*")
+        (erase-buffer)
+        (insert full-text)
+        (shr-render-buffer (current-buffer))
+  )))
 
-(use-package elfeed-goodies
-  :init
-  (elfeed-goodies/setup)
-  :config
-  (setq elfeed-goodies/entry-pane-size 0.5))
+  (use-package elfeed
+    :config
+    (setq elfeed-use-curl t)  ;; Use curl to fetch articles
+    (setq elfeed-html-render 'html) ;; Use HTML rendering
+    (setq elfeed-show-entry-default 'inline)
+    (define-key elfeed-show-mode-map (kbd "F") 'elfeed-fetch-full-text)
 
+    (setq elfeed-search-feed-face ":foreground #ffffff :weight bold"
+          elfeed-feeds (quote
+                         (("https://www.aljazeera.com/xml/rss/all.xml" Aljazeera News)
+                          ("https://feeds.bbci.co.uk/news/rss.xml" BBC Top News)
+                          ("https://feeds.bbci.co.uk/news/world/rss.xml" BBC World News)
+                          ("https://www.reddit.com/r/linux.rss" reddit linux)
+                          ("https://www.reddit.com/r/commandline.rss" reddit commandline)
+                          ("https://www.reddit.com/r/emacs.rss" reddit emacs)
+                          ("https://hackaday.com/blog/feed/" hackaday linux)
+                          ("https://opensource.com/feed" opensource linux)
+                          ("https://www.techrepublic.com/rssfeeds/topic/open-source/" techrepublic linux)
+                          ))))
+
+  (use-package elfeed-goodies
+    :init
+    (elfeed-goodies/setup)
+    :config
+    (setq elfeed-goodies/entry-pane-size 0.5))
 #+end_src
 
 * Minibuffer escape one time
@@ -669,7 +679,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
   (defun vlc-play-file (file)
     "Play a media FILE using VLC."
-    (interactive (list (read-file-name "Select file: " "E:/data/audio/music/")))
+    (interactive (list (read-file-name "Select file: " "E:/data/audio/")))
     (let* ((encoded-file (encode-url (expand-file-name file)))
            (short-title (if (> (length (file-name-nondirectory file)) 10)
                             (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
@@ -715,9 +725,20 @@ The following settings are simple modes that are enabled (or disabled) so that E
       (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
 #+end_src
 
+* Touch typing
 
+#+begin_src emacs-lisp
+  ;; Run 'speed-type-text'
+  (use-package speed-type)
+#+end_src
 
+* chronometer
 
+#+begin_src emacs-lisp
+  ;; Link: https://github.com/marcelotoledo/chronometer
+  ;; Run 'chronometer'
+  (use-package chronometer)
+#+end_src
 
 
 
