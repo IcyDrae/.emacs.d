@@ -748,7 +748,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
   (defun show-prayer-times ()
   "Run the PowerShell Prayer Times script and display the output."
   (interactive)
-  (let* ((script-path "C:/Users/rgj/Powershell_Prayer_Times.ps1") ;; Update this path if necessary
+  (let* ((script-path "C:/Users/rgj/Powershell-Prayer-Times/Powershell_Prayer_Times.ps1") ;; Update this path if necessary
          (output-buffer (get-buffer-create "*Prayer Times Output*"))
          (output (shell-command-to-string (concat "powershell.exe -ExecutionPolicy Bypass -File " script-path))))
     (with-current-buffer output-buffer
