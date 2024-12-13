@@ -7,7 +7,7 @@
 * Table of contents :toc:
 - [[#first-step][First step]]
 - [[#important-programs-to-load-first][Important programs to load first]]
-  - [[#elpaca-package-manager-link-httpsgithubcomprogfolioelpaca][Elpaca Package Manager, Link: https://github.com/progfolio/elpaca]]
+  - [[#elpaca-package-manager][Elpaca Package Manager]]
 - [[#fonts][Fonts]]
 - [[#which-key-package][which-key package]]
 - [[#org-mode][org-mode]]
@@ -42,10 +42,11 @@
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
 
 * Important programs to load first
-** Elpaca Package Manager, Link: https://github.com/progfolio/elpaca
+** Elpaca Package Manager
+Link: https://github.com/progfolio/elpaca
 
 #+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.7)
+  (defvar elpaca-installer-version 0.8)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -196,9 +197,9 @@ Org-bullets gives us attractive bullets rather than asterisks.
     (setq org-pomodoro-log 'note)  ;; Logs a note with each Pomodoro session
     (setq org-pomodoro-finished-sound-p t)  ;; Enables the sound after a Pomodoro session
     (setq org-pomodoro-ticking-sound nil)  ;; Optional: Disable ticking sound if you don't want it
-    (setq org-pomodoro-finished-sound "C:/Users/rgj/.emacs.d/pomodoro-bell.wav")
-    (setq org-pomodoro-short-break-sound "C:/Users/rgj/.emacs.d/break-over-sound.wav")
-    (setq org-pomodoro-long-break-sound "C:/Users/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-finished-sound "/home/rgj/.emacs.d/pomodoro-bell.wav")
+    (setq org-pomodoro-short-break-sound "/home/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-long-break-sound "/home/rgj/.emacs.d/break-over-sound.wav")
 
     ;; Set the default times (optional)
     (setq org-pomodoro-length 50)  ;; Length of each Pomodoro session (in minutes)
@@ -500,14 +501,15 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 Adding rainbow coloring to parentheses.
 
 #+begin_src emacs-lisp
-              (use-package rainbow-delimiters
-                :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
-                       (clojure-mode . rainbow-delimiters-mode)
-                       (python-mode . rainbow-delimiters-mode)
-                       (javascript-mode . rainbow-delimiters-mode)
-                       (java-mode . rainbow-delimiters-mode)
-                       (php-mode . rainbow-delimiters-mode)
-                       (sql-mode . rainbow-delimiters-mode)))
+  (use-package rainbow-delimiters
+    :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
+           (csharp-mode . rainbow-delimiters-mode)
+           (clojure-mode . rainbow-delimiters-mode)
+           (python-mode . rainbow-delimiters-mode)
+           (javascript-mode . rainbow-delimiters-mode)
+           (java-mode . rainbow-delimiters-mode)
+           (php-mode . rainbow-delimiters-mode)
+           (sql-mode . rainbow-delimiters-mode)))
 #+end_src
 
 * Diminish
@@ -648,7 +650,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
     (interactive)
     (tab-new)  ;; Open a new tab
     (switch-to-buffer "*scratch*")
-    (neotree-dir "E:/"))  ;; Show Neotree with E: drive
+    (neotree-dir "/run/media/rgj/My Passport/"))  ;; Show Neotree with E: drive
 
   ;; Rebind C-x t 2 to open the new tab with Neotree
   (global-set-key (kbd "C-x t 2") 'open-new-tab-with-neotree)
@@ -681,7 +683,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
   (defun vlc-play-file (file)
     "Play a media FILE using VLC."
-    (interactive (list (read-file-name "Select file: " "E:/data/audio/")))
+    (interactive (list (read-file-name "Select file: " "/run/media/rgj/My Passport/data/audio/")))
     (let* ((encoded-file (encode-url (expand-file-name file)))
            (short-title (if (> (length (file-name-nondirectory file)) 10)
                             (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
@@ -748,9 +750,9 @@ The following settings are simple modes that are enabled (or disabled) so that E
   (defun show-prayer-times ()
   "Run the PowerShell Prayer Times script and display the output."
   (interactive)
-  (let* ((script-path "C:/Users/rgj/Powershell-Prayer-Times/Powershell_Prayer_Times.ps1") ;; Update this path if necessary
+  (let* ((script-path "/home/rgj/Powershell-Prayer-Times/Powershell_Prayer_Times.ps1") ;; Update this path if necessary
          (output-buffer (get-buffer-create "*Prayer Times Output*"))
-         (output (shell-command-to-string (concat "powershell.exe -ExecutionPolicy Bypass -File " script-path))))
+         (output (shell-command-to-string (concat "pwsh -ExecutionPolicy Bypass -File " script-path))))
     (with-current-buffer output-buffer
       (erase-buffer) ;; Clear the buffer
       (insert output) ;; Insert the output of the script
