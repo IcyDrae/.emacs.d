@@ -209,6 +209,17 @@ Org-bullets gives us attractive bullets rather than asterisks.
 
     (setq org-clock-persist 'history)  ;; Saves clock history between Emacs sessions
     (org-clock-persistence-insinuate)  ;; Ensures that your clocks are persisted
+
+    ;; Custom function to dynamically set Pomodoro length
+    (defun my/org-pomodoro (length)
+    "Start a Pomodoro session with LENGTH in minutes.
+     If LENGTH is not provided, use the default value of `org-pomodoro-length`."
+    (interactive "nPomodoro length in minutes (default is 50): ")
+    (let ((original-length org-pomodoro-length))
+      (setq org-pomodoro-length (if (> length 0) length original-length))
+      (org-pomodoro)
+      (setq org-pomodoro-length original-length))
+    )  ;; Restore the default after starting
   )
 #+end_src
 
@@ -727,6 +738,20 @@ The following settings are simple modes that are enabled (or disabled) so that E
     (interactive)
     (let ((url "http://localhost:8080/requests/status.xml"))
       (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
+
+  (defvar vlc-mode-map (make-sparse-keymap)
+    "Keymap for VLC commands.")
+
+  (define-key vlc-mode-map (kbd "p") 'vlc-play-file)
+  (define-key vlc-mode-map (kbd "s") 'vlc-stop)
+  (define-key vlc-mode-map (kbd "P") 'vlc-pause)
+  (define-key vlc-mode-map (kbd "r") 'vlc-resume)
+  (define-key vlc-mode-map (kbd "v") 'vlc-volume)
+  (define-key vlc-mode-map (kbd "S") 'vlc-status)
+  (define-key vlc-mode-map (kbd "l") 'vlc-start)
+
+  ;; Bind the prefix to a global key
+  (global-set-key (kbd "C-c") vlc-mode-map)
 #+end_src
 
 * Touch typing
