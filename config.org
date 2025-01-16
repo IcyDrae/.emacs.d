@@ -37,6 +37,10 @@
 - [[#touch-typing][Touch typing]]
 - [[#chronometer][chronometer]]
 - [[#islamic-prayer-times][Islamic prayer times]]
+- [[#custom-keybindings][Custom keybindings]]
+  - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
+  - [[#vlc][VLC]]
+  - [[#org-pomodoro-1][org-pomodoro]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -655,7 +659,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 #+end_src
 
 #+begin_src emacs-lisp
-    ; Open an empty new tab when creating new tabs.
+  ; Open an empty new tab when creating new tabs.
   (defun open-new-tab-with-neotree ()
     "Open a new tab and display Neotree at the E: drive."
     (interactive)
@@ -671,7 +675,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
 #+begin_src emacs-lisp
   (require 'url)
-
+  
   (defun vlc-start ()
     "Start VLC with HTTP interface and dummy interface."
     (interactive)
@@ -701,7 +705,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
                           (file-name-nondirectory file)))) ; If it's 10 characters or less, use the full name
       (setq vlc-current-file short-title) ; Update the currently playing file variable
                                           ; (message "Playing file with URL: %s" (format "http://localhost:8080/requests/status.xml?command=in_play&input=file:///%s" encoded-file))
-      (start-process "curl" nil "curl" "-u" ":1234" (format "http://localhost:8080/requests/status.xml?command=in_play&input=file:///%s" encoded-file))
+      (vlc-status (format "?command=in_play&input=file:///%s" encoded-file))
       (update-vlc-mode-line)
   ))
 
@@ -714,44 +718,38 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
   (defun vlc-pause ()
     (interactive)
-    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_pause"))
+    (vlc-status "?command=pl_pause"))
 
   (defun vlc-resume ()
     (interactive)
-    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_play"))
+    (vlc-status "?command=pl_play"))
 
   (defun vlc-stop ()
     (interactive)
     (setq vlc-current-file nil) ;; Clear the current file info
-    (shell-command "curl --user :1234 http://localhost:8080/requests/status.xml?command=pl_stop")
+    (vlc-status "?command=pl_stop")
     (update-vlc-mode-line)
   )
 
   (defun vlc-volume (level)
     "Set VLC volume to LEVEL (0-512)."
     (interactive "nVolume Level (0-512): ")
-    (let ((url (format "http://localhost:8080/requests/status.xml?command=volume&val=%d" level)))
-      (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
+    (let ((url (format "?command=volume&val=%d" level)))
+      (vlc-status url)))
 
-  (defun vlc-status ()
-    "Get the current status of VLC."
-    (interactive)
-    (let ((url "http://localhost:8080/requests/status.xml"))
-      (start-process "curl" "*curl*" "curl" "-u" ":1234" url)))
-
-  (defvar vlc-mode-map (make-sparse-keymap)
-    "Keymap for VLC commands.")
-
-  (define-key vlc-mode-map (kbd "p") 'vlc-play-file)
-  (define-key vlc-mode-map (kbd "s") 'vlc-stop)
-  (define-key vlc-mode-map (kbd "P") 'vlc-pause)
-  (define-key vlc-mode-map (kbd "r") 'vlc-resume)
-  (define-key vlc-mode-map (kbd "v") 'vlc-volume)
-  (define-key vlc-mode-map (kbd "S") 'vlc-status)
-  (define-key vlc-mode-map (kbd "l") 'vlc-start)
-
-  ;; Bind the prefix to a global key
-  (global-set-key (kbd "C-c") vlc-mode-map)
+  (defun vlc-status (endpoint)
+  "Get and display the current status of VLC in a readable format."
+  (interactive)
+  (let ((url (format "http://localhost:8080/requests/status.xml%s" endpoint)))
+    (with-temp-buffer
+      ;; Fetch the XML response from VLC
+      (call-process "curl" nil t nil "-u" ":1234" url)
+      (goto-char (point-min))
+      ;; Extract relevant data manually
+      (let ((state (if (re-search-forward "<state>\\([^<]+\\)</state>" nil t)
+                       (match-string 1)
+                     "Unknown")))
+      (message "VLC Status\nState: %s" state)))))
 #+end_src
 
 * Touch typing
@@ -784,6 +782,67 @@ The following settings are simple modes that are enabled (or disabled) so that E
       (goto-char (point-min))) ;; Move to the beginning of the buffer
     (display-buffer output-buffer))) ;; Show the buffer
 #+end_src
+
+* Custom keybindings
+** Source Code Block Tag Expansion
+Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin_src tag.  Other expansions available include:
+
+| Typing the below + TAB | Expands to ...                          |
+|------------------------+-----------------------------------------|
+| <a                     | '#+BEGIN_EXPORT ascii' … '#+END_EXPORT  |
+| <c                     | '#+BEGIN_CENTER' … '#+END_CENTER'       |
+| <C                     | '#+BEGIN_COMMENT' … '#+END_COMMENT'     |
+| <e                     | '#+BEGIN_EXAMPLE' … '#+END_EXAMPLE'     |
+| <E                     | '#+BEGIN_EXPORT' … '#+END_EXPORT'       |
+| <h                     | '#+BEGIN_EXPORT html' … '#+END_EXPORT'  |
+| <l                     | '#+BEGIN_EXPORT latex' … '#+END_EXPORT' |
+| <q                     | '#+BEGIN_QUOTE' … '#+END_QUOTE'         |
+| <s                     | '#+BEGIN_SRC' … '#+END_SRC'             |
+| <v                     | '#+BEGIN_VERSE' … '#+END_VERSE'         |
+
+#+begin_src emacs-lisp
+(use-package org-tempo
+  :ensure nil) ;; tell use-package not to try to install org-tempo since it's already there.
+#+end_src
+
+** VLC
+
+#+begin_src emacs-lisp
+  (defvar vlc-mode-map (make-sparse-keymap)
+    "Keymap for VLC commands.")
+
+  (define-key vlc-mode-map (kbd "P") 'vlc-play-file)
+  (define-key vlc-mode-map (kbd "s") 'vlc-stop)
+  (define-key vlc-mode-map (kbd "p") 'vlc-pause)
+  (define-key vlc-mode-map (kbd "r") 'vlc-resume)
+  (define-key vlc-mode-map (kbd "v") 'vlc-volume)
+  (define-key vlc-mode-map (kbd "S") 'vlc-status)
+  (define-key vlc-mode-map (kbd "l") 'vlc-start)
+
+  ;; Bind the prefix to a global key
+  (global-set-key (kbd "C-c") vlc-mode-map)
+#+end_src
+
+** org-pomodoro
+
+#+begin_src emacs-lisp
+  (defvar org-pomodoro-mode-map (make-sparse-keymap)
+    "Keymap for org-pomodoro commands.")
+
+  (define-key vlc-mode-map (kbd "op") 'org-pomodoro)
+
+  ;; Bind the prefix to a global key
+  (global-set-key (kbd "C-c") vlc-mode-map)
+#+end_src
+
+
+
+
+
+
+
+
+
 
 
 
