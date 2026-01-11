@@ -556,6 +556,12 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (global-treesit-auto-mode))
 
 ;; ------------------------------
+;; Git prefix map
+;; ------------------------------
+(define-prefix-command 'my-git-map)
+(global-set-key (kbd "C-c g") 'my-git-map)
+
+;; ------------------------------
 ;; Diff-HL Setup
 ;; ------------------------------
 (defun my/diff-hl-show-hunk-at-click (event)
@@ -567,24 +573,20 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 (use-package diff-hl
   :ensure t
   :config
-  ;; Enable globally
   (global-diff-hl-mode 1)
   (diff-hl-flydiff-mode 1)
 
   ;; Make left-fringe clicks show hunk
   (define-key diff-hl-mode-map [left-fringe mouse-1] #'my/diff-hl-show-hunk-at-click)
 
-  ;; Function to refresh diff-hl for the current buffer
+  ;; Refresh diff-hl for the current buffer after save
   (defun my/diff-hl-refresh-buffer ()
-    "Refresh diff-hl for the current buffer if it's visiting a file."
     (when (buffer-file-name)
       (diff-hl-update)))
-
-  ;; Refresh after saving a file
-  (add-hook 'after-save-hook #'my/diff-hl-refresh-buffer)
+  (add-hook 'after-save-hook #'my/diff-hl-refresh-buffer))
 
 ;; ------------------------------
-;; Force refresh diff-hl hunks
+;; Force refresh manually
 ;; ------------------------------
 (defun my/diff-hl-refresh-now ()
   "Force update diff-hl indicators in the current buffer."
@@ -593,7 +595,6 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     (diff-hl-update)
     (message "Diff-HL refreshed!")))
 
-;; Bind it somewhere convenient, e.g., under your C-c g prefix
 (define-key my-git-map (kbd "r") #'my/diff-hl-refresh-now)
 #+end_src>
 
