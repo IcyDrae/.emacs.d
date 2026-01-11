@@ -9,4 +9,7 @@ projectile-bookmarks.eld
 recentf
 org-clock-save.el
 speed-type/
+.DS_Store
+#early-init.el#
+
 

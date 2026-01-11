@@ -13,7 +13,7 @@
  '(initial-frame-alist '((fullscreen . maximized)))
  '(line-number-mode nil)
  '(minibuffer-frame-alist nil)
- '(package-selected-packages '(evil))
+ '(package-selected-packages nil)
  '(tab-bar-mode t))
 
 (setq display-time-day-and-date t)

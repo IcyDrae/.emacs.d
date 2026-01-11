@@ -16,7 +16,7 @@
   - [[#hide-org-indent][Hide org-indent]]
   - [[#org-pomodoro][org-pomodoro]]
 - [[#theme][Theme]]
-- [[#rainbow-mode][rainbow-mode]]
+- [[#rainbow-mode][Rainbow-mode]]
 - [[#icons][Icons]]
 - [[#ivy-and-counsel][Ivy and Counsel]]
 - [[#buffer-move][buffer-move]]
@@ -41,6 +41,8 @@
   - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
   - [[#vlc][VLC]]
   - [[#org-pomodoro-1][org-pomodoro]]
+  - [[#eshell-new][eshell-new]]
+  - [[#drag-stuff][Drag-stuff.]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -50,7 +52,7 @@ Copy all the dependencies from the emacs-29-deps folder into the Emacs installat
 Link: https://github.com/progfolio/elpaca
 
 #+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.8)
+  (defvar elpaca-installer-version 0.11)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -106,15 +108,15 @@ Link: https://github.com/progfolio/elpaca
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil
     :font "Red Hat Mono"
-    :height 125
+    :height 180
     :weight 'medium)
   (set-face-attribute 'variable-pitch nil
     :font "Red Hat Mono"
-    :height 120
+    :height 180
     :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
     :font "Red Hat Mono"
-    :height 120
+    :height 180
     :weight 'medium)
   ;; Makes commented text and keywords italics.
   ;; This is working in emacsclient but not emacs.
@@ -127,10 +129,10 @@ Link: https://github.com/progfolio/elpaca
   ;; This sets the default font on all graphical frames created after restarting Emacs.
   ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
   ;; are not right unless I also add this method of setting the default font.
-  (add-to-list 'default-frame-alist '(font . "Red Hat Mono-13"))
+  (add-to-list 'default-frame-alist '(font . "Red Hat Mono-18"))
 
   ;; Uncomment the following line if line spacing needs adjusting.
-  (setq-default line-spacing 0.12)
+  (setq-default line-spacing 0.14)
 #+end_src
 
 * which-key package
@@ -201,9 +203,9 @@ Org-bullets gives us attractive bullets rather than asterisks.
     (setq org-pomodoro-log 'note)  ;; Logs a note with each Pomodoro session
     (setq org-pomodoro-finished-sound-p t)  ;; Enables the sound after a Pomodoro session
     (setq org-pomodoro-ticking-sound nil)  ;; Optional: Disable ticking sound if you don't want it
-    (setq org-pomodoro-finished-sound "/home/rgj/.emacs.d/pomodoro-bell.wav")
-    (setq org-pomodoro-short-break-sound "/home/rgj/.emacs.d/break-over-sound.wav")
-    (setq org-pomodoro-long-break-sound "/home/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-finished-sound "/Users/rgj/.emacs.d/pomodoro-bell.wav")
+    (setq org-pomodoro-short-break-sound "/Users/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-long-break-sound "/Users/rgj/.emacs.d/break-over-sound.wav")
 
     ;; Set the default times (optional)
     (setq org-pomodoro-length 50)  ;; Length of each Pomodoro session (in minutes)
@@ -230,15 +232,28 @@ Org-bullets gives us attractive bullets rather than asterisks.
 * Theme
 
 #+begin_src emacs-lisp
-  (use-package alect-themes
-  :init (progn (load-theme 'alect-light t)
-               (load-theme 'alect-dark t)
-               (enable-theme 'alect-light))
-  :defer t
-  :ensure t)
+  ;  (use-package catppuccin-theme
+  ;  :init (progn (load-theme 'catppuccin t)
+  ;               (enable-theme 'catppuccin))
+  ;  :defer t
+  ;  :ensure t)
+  (use-package doom-themes
+  :ensure t
+  :custom
+  ;; Global settings (defaults)
+  (doom-themes-enable-bold t)   ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;; for treemacs users
+  :config
+  (load-theme 'doom-dracula t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 #+end_src
 
-* rainbow-mode
+* Rainbow-mode
 Display the actual color as a background for any hex color value (ex. #ffffff).  The code block below enables rainbow-mode in all programming modes (prog-mode) as well as org-mode, which is why rainbow works in this document.
 
 #+begin_src emacs-lisp
@@ -665,7 +680,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
     (interactive)
     (tab-new)  ;; Open a new tab
     (switch-to-buffer "*scratch*")
-    (neotree-dir "/run/media/rgj/My Passport/"))  ;; Show Neotree with E: drive
+    (neotree-dir "/Volumes/My Passport/data"))  ;; Show Neotree with E: drive
 
   ;; Rebind C-x t 2 to open the new tab with Neotree
   (global-set-key (kbd "C-x t 2") 'open-new-tab-with-neotree)
@@ -698,7 +713,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
   (defun vlc-play-file (file)
     "Play a media FILE using VLC."
-    (interactive (list (read-file-name "Select file: " "/run/media/rgj/My Passport/data/audio/")))
+    (interactive (list (read-file-name "Select file: " "/Volumes/My\ Passport/data/audio/")))
     (let* ((encoded-file (encode-url (expand-file-name file)))
            (short-title (if (> (length (file-name-nondirectory file)) 10)
                             (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
@@ -770,17 +785,17 @@ The following settings are simple modes that are enabled (or disabled) so that E
 * Islamic prayer times
 
 #+begin_src emacs-lisp
-  (defun show-prayer-times ()
-  "Run the PowerShell Prayer Times script and display the output."
+(defun show-prayer-times ()
+  "Run the Zsh prayer times script and display the output."
   (interactive)
-  (let* ((script-path "/home/rgj/Powershell-Prayer-Times/Powershell_Prayer_Times.ps1") ;; Update this path if necessary
+  (let* ((script-path "/Users/rgj/Powershell-Prayer-Times/ZshPrayerTimes.sh")
          (output-buffer (get-buffer-create "*Prayer Times Output*"))
-         (output (shell-command-to-string (concat "pwsh -ExecutionPolicy Bypass -File " script-path))))
+         (output (shell-command-to-string (concat "sh " script-path))))
     (with-current-buffer output-buffer
-      (erase-buffer) ;; Clear the buffer
-      (insert output) ;; Insert the output of the script
-      (goto-char (point-min))) ;; Move to the beginning of the buffer
-    (display-buffer output-buffer))) ;; Show the buffer
+      (erase-buffer)
+      (insert output)
+      (goto-char (point-min)))
+    (display-buffer output-buffer)))
 #+end_src
 
 * Custom keybindings
@@ -821,6 +836,8 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
 
   ;; Bind the prefix to a global key
   (global-set-key (kbd "C-c") vlc-mode-map)
+
+  (global-set-key (kbd "C-c m") 'set-mark-command)
 #+end_src
 
 ** org-pomodoro
@@ -835,9 +852,23 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
   (global-set-key (kbd "C-c") vlc-mode-map)
 #+end_src
 
+** eshell-new
+#+begin_src emacs-lisp
+  (defun eshell-new ()
+  (interactive)
+  (let ((eshell-buffer-name (generate-new-buffer-name "*eshell*")))
+    (eshell)))
+#+end_src
 
+** Drag-stuff.
+Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words, region, lines) around in Emacs. When 'drag-stuff-define-keys' is enabled, then the following keybindings are set: M-up, M-down, M-left and M-right.
 
-
+#+begin_src emacs-lisp
+   (use-package drag-stuff
+      :init
+      (drag-stuff-global-mode 1)      
+      (drag-stuff-define-keys))    	           
+#+end_src
 
 
 
