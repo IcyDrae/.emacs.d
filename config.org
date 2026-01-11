@@ -569,36 +569,19 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   :config
   ;; Enable globally
   (global-diff-hl-mode 1)
-  ;; Enable auto-refresh on file changes
   (diff-hl-flydiff-mode 1)
 
   ;; Make left-fringe clicks show hunk
   (define-key diff-hl-mode-map [left-fringe mouse-1] #'my/diff-hl-show-hunk-at-click)
 
-  ;; Automatically remove fringe indicators for files that are clean in Git
-  (defun my/diff-hl-clear-if-committed ()
-    "Clear diff-hl indicators for the current file if it's clean in Git."
-    (when (and (buffer-file-name)
-               (string= "" (string-trim
-                            (shell-command-to-string
-                             (format "git status --porcelain %s"
-                                     (shell-quote-argument (buffer-file-name)))))))
+  ;; Function to refresh diff-hl for the current buffer
+  (defun my/diff-hl-refresh-buffer ()
+    "Refresh diff-hl for the current buffer if it's visiting a file."
+    (when (buffer-file-name)
       (diff-hl-update)))
-  
-  ;; Run after saving a file
-  (add-hook 'after-save-hook #'my/diff-hl-clear-if-committed))
 
-;; ------------------------------
-;; Shortcut to show hunk manually
-;; ------------------------------
-(define-prefix-command 'my-git-map)
-(global-set-key (kbd "C-c g") 'my-git-map)
-
-(use-package diff-hl-show-hunk
-  :ensure t
-  :after diff-hl
-  :bind (:map my-git-map
-              ("h" . diff-hl-show-hunk)))
+  ;; Refresh after saving a file
+  (add-hook 'after-save-hook #'my/diff-hl-refresh-buffer)
 #+end_src>
 
 * rainbow-delimiters
