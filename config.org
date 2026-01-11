@@ -555,6 +555,9 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   :config
   (global-treesit-auto-mode))
 
+#+end_src
+
+#+begin_src emacs-lisp
 ;; ------------------------------
 ;; Git prefix map
 ;; ------------------------------
@@ -573,13 +576,14 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 (use-package diff-hl
   :ensure t
   :config
+  ;; Enable globally
   (global-diff-hl-mode 1)
   (diff-hl-flydiff-mode 1)
 
   ;; Make left-fringe clicks show hunk
   (define-key diff-hl-mode-map [left-fringe mouse-1] #'my/diff-hl-show-hunk-at-click)
 
-  ;; Refresh diff-hl for the current buffer after save
+  ;; Refresh diff-hl after saving
   (defun my/diff-hl-refresh-buffer ()
     (when (buffer-file-name)
       (diff-hl-update)))
@@ -595,8 +599,9 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     (diff-hl-update)
     (message "Diff-HL refreshed!")))
 
+;; Bind manual refresh under C-c g r
 (define-key my-git-map (kbd "r") #'my/diff-hl-refresh-now)
-#+end_src>
+#+end_src
 
 * rainbow-delimiters
 Adding rainbow coloring to parentheses.
