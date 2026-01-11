@@ -25,6 +25,7 @@
 - [[#projects][Projects]]
 - [[#dashboard][Dashboard]]
 - [[#programming-languages-support][Programming languages support]]
+  - [[#c-mode][C# Mode]]
 - [[#rainbow-delimiters][rainbow-delimiters]]
 - [[#diminish][Diminish]]
 - [[#complete-anything][complete-anything]]
@@ -42,7 +43,7 @@
   - [[#vlc][VLC]]
   - [[#org-pomodoro-1][org-pomodoro]]
   - [[#eshell-new][eshell-new]]
-  - [[#drag-stuff][Drag-stuff.]]
+- [[#drag-stuff][Drag-stuff.]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -525,7 +526,65 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (use-package php-mode)
   (use-package haskell-mode)
   (use-package lua-mode)
+  (use-package csharp-mode
+    :mode "\\.cs\\'")
 #+end_src
+
+** C# Mode
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :commands lsp
+  :hook ((csharp-mode . lsp))
+  :custom
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-enable-snippet t)
+  (lsp-idle-delay 0.5))
+
+(use-package lsp-ui
+  :after lsp-mode
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-sideline-enable t))
+
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-auto-configure-mode))
+
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+
+;; ------------------------------
+;; Safe fringe click command
+;; ------------------------------
+(defun my/diff-hl-show-hunk-at-click (event)
+  "Show the diff hunk at mouse click EVENT."
+  (interactive "e")
+  (mouse-set-point event)
+  (diff-hl-show-hunk))
+
+(use-package diff-hl
+  :ensure t
+  :config
+  (global-diff-hl-mode 1)
+  (diff-hl-flydiff-mode 1)
+
+  ;; Make left-fringe clicks show hunk
+  (define-key diff-hl-mode-map [left-fringe mouse-1] #'my/diff-hl-show-hunk-at-click))
+
+;; ------------------------------
+;; Shortcut to show hunk manually
+;; ------------------------------
+(define-prefix-command 'my-git-map)
+(global-set-key (kbd "C-c g") 'my-git-map)
+
+(use-package diff-hl-show-hunk
+  :ensure t
+  :after diff-hl
+  :bind (:map my-git-map
+              ("h" . diff-hl-show-hunk)))
+#+end_src>
 
 * rainbow-delimiters
 Adding rainbow coloring to parentheses.
@@ -860,7 +919,7 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
     (eshell)))
 #+end_src
 
-** Drag-stuff.
+* Drag-stuff.
 Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words, region, lines) around in Emacs. When 'drag-stuff-define-keys' is enabled, then the following keybindings are set: M-up, M-down, M-left and M-right.
 
 #+begin_src emacs-lisp
