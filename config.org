@@ -582,6 +582,19 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 
   ;; Refresh after saving a file
   (add-hook 'after-save-hook #'my/diff-hl-refresh-buffer)
+
+;; ------------------------------
+;; Force refresh diff-hl hunks
+;; ------------------------------
+(defun my/diff-hl-refresh-now ()
+  "Force update diff-hl indicators in the current buffer."
+  (interactive)
+  (when (buffer-file-name)
+    (diff-hl-update)
+    (message "Diff-HL refreshed!")))
+
+;; Bind it somewhere convenient, e.g., under your C-c g prefix
+(define-key my-git-map (kbd "r") #'my/diff-hl-refresh-now)
 #+end_src>
 
 * rainbow-delimiters
