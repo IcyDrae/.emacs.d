@@ -10,7 +10,7 @@ recentf
 org-clock-save.el
 speed-type/
 .DS_Store
-#*
+*#
 .dap-breakpoints
 .lsp-session-v1
 
