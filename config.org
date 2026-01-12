@@ -526,35 +526,42 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (use-package php-mode)
   (use-package haskell-mode)
   (use-package lua-mode)
-  (use-package csharp-mode
-    :mode "\\.cs\\'")
 #+end_src
 
 ** C# Mode
 #+begin_src emacs-lisp
-(use-package lsp-mode
-  :commands lsp
-  :hook ((csharp-mode . lsp))
-  :custom
-  (lsp-headerline-breadcrumb-enable nil)
-  (lsp-enable-snippet t)
-  (lsp-idle-delay 0.5))
+  (use-package lsp-mode
+    :commands lsp
+    :hook ((csharp-mode . lsp))
+    :custom
+    (lsp-headerline-breadcrumb-enable nil)
+    (lsp-enable-snippet t)
+    (lsp-idle-delay 0.5))
 
-(use-package lsp-ui
-  :after lsp-mode
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-sideline-enable t))
+  (use-package lsp-ui
+    :after lsp-mode
+    :custom
+    (lsp-ui-doc-enable t)
+    (lsp-ui-sideline-enable t))
 
-(use-package dap-mode
-  :after lsp-mode
-  :config
-  (dap-auto-configure-mode))
+  (use-package treesit-auto
+    :config
+    (global-treesit-auto-mode))
 
-(use-package treesit-auto
-  :config
-  (global-treesit-auto-mode))
+  ;; ------------------------------
+  ;; Consult and ripgrep setup
+  ;; ------------------------------
+  (use-package consult
+    :ensure t)
 
+  (use-package rg
+    :ensure t
+    :config
+    ;; Enable default keybindings for rg
+    (rg-enable-default-bindings)
+
+    ;; Bind M-s r to search the current project with rg
+    (global-set-key (kbd "M-s r") #'rg-project))
 #+end_src
 
 #+begin_src emacs-lisp
