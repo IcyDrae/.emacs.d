@@ -544,6 +544,10 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     (lsp-ui-doc-enable t)
     (lsp-ui-sideline-enable t))
 
+  (with-eval-after-load 'dap-mode
+  ;; don't let breakpoints react to mouse clicks in fringe
+  (define-key dap-mode-map [left-fringe mouse-1] nil))
+
   (use-package treesit-auto
     :config
     (global-treesit-auto-mode))
