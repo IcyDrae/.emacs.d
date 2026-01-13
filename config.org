@@ -246,7 +246,7 @@ Org-bullets gives us attractive bullets rather than asterisks.
   (doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;; for treemacs users
   :config
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-badger t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -566,6 +566,15 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 
     ;; Bind M-s r to search the current project with rg
     (global-set-key (kbd "M-s r") #'rg-project))
+
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq electric-indent-mode nil)
+
+  (add-hook 'csharp-mode-hook
+          (lambda ()
+            (setq c-basic-offset 4)))
+
 #+end_src
 
 #+begin_src emacs-lisp
