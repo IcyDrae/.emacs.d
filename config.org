@@ -26,6 +26,8 @@
 - [[#dashboard][Dashboard]]
 - [[#programming-languages-support][Programming languages support]]
   - [[#c-mode][C# Mode]]
+  - [[#git-diffs-on-the-side][Git diffs on the side]]
+  - [[#origami-mode-folding-code][origami-mode (folding code)]]
 - [[#rainbow-delimiters][rainbow-delimiters]]
 - [[#diminish][Diminish]]
 - [[#complete-anything][complete-anything]]
@@ -44,6 +46,7 @@
   - [[#org-pomodoro-1][org-pomodoro]]
 - [[#vterm][vterm]]
 - [[#drag-stuff][Drag-stuff]]
+- [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -579,6 +582,8 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (setq lsp-diagnostics-provider :flymake)
 #+end_src
 
+** Git diffs on the side
+
 #+begin_src emacs-lisp
 ;; ------------------------------
 ;; Git prefix map
@@ -623,6 +628,18 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 
 ;; Bind manual refresh under C-c g r
 (define-key my-git-map (kbd "r") #'my/diff-hl-refresh-now)
+#+end_src
+
+** origami-mode (folding code)
+
+#+begin_src emacs-lisp
+(use-package origami
+  :hook (prog-mode . origami-mode)
+  :bind
+  (("C-c o t" . origami-toggle-node)    ;; fold/unfold node under cursor
+   ("C-c o r" . origami-recursively-toggle-node) ;; fold/unfold recursively
+   ("C-c o a" . origami-open-all-nodes)
+   ("C-c o c" . origami-close-all-nodes)))
 #+end_src
 
 * rainbow-delimiters
@@ -978,7 +995,12 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
       (drag-stuff-define-keys))    	           
 #+end_src
 
-
+* Minibuffer cursor caret remove and make minibuffer cursor a block
+#+begin_src emacs-lisp
+;; Remove any extra prompt prefix from ivy / counsel
+(setq ivy-initial-inputs-alist nil)
+; removes ^ or any initial regex in prompts
+#+end_src
 
 
 
