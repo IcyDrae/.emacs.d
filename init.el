@@ -36,6 +36,15 @@
   "config.org"
   user-emacs-directory))
 
+;; Add the folder containing presence.el to your load-path
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-presence"))
+;; Load the presence package
+(require 'presence)
+;; Enable presence-mode globally
+(presence-mode 1)
+;; start presence-mode automatically
+(add-hook 'emacs-startup-hook #'presence-mode)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
