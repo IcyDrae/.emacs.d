@@ -1,0 +1,62 @@
+* presence.el - Discord Rich Presence for Emacs
+
+** Preview
+
+[[./images/presence-preview.png]]
+
+** Overview
+
+=presence.el= is an Emacs package that allows you to seamlessly integrate Emacs with Discord's Rich Presence feature. When you enable the global minor mode =presence-mode=, this package communicates with your local Discord client to showcase information under the 'Playing a Game' status. It updates this information at regular intervals.
+
+** Installation
+
+You can install =presence.el= by cloning the GitHub repository:
+
+#+BEGIN_SRC elisp
+git clone https://github.com/richardhbtz/emacs-presence.git
+#+END_SRC
+
+Then, add the following to your Emacs init file to load the package:
+
+#+BEGIN_SRC elisp
+(add-to-list 'load-path "/path/to/emacs-presence")
+(require 'presence)
+#+END_SRC
+
+** Configuration
+
+You can customize various aspects of =presence.el= to suit your preferences:
+
+- =presence-client-id=: Set your Discord application ID.
+- =presence-icon-base=: Define the base URL for icon images.
+- =presence-refresh-rate=: Adjust the update interval in seconds.
+- =presence-idle-timer=: Set the time to wait before setting the status to idle.
+- =presence-idle-message=: Customize the idle message.
+- =presence-quiet=: Toggle to suppress presence-related messages.
+- =presence-mode-icon-alist=: Define mappings of major modes to icon names.
+- =presence-mode-text-alist=: Define mappings of major modes to text labels.
+- =presence-display-buffer-details=: Enable or disable displaying buffer details.
+- =presence-display-line-numbers=: Toggle displaying line numbers.
+- =presence-buffer-details-format-function=: Customize the buffer details format.
+- =presence-use-major-mode-as-main-icon=: Choose whether major mode determines the main icon.
+- =presence-show-small-icon=: Toggle displaying the small icon.
+- =presence-editor-icon=: Set the icon for the text editor.
+
+** Usage
+
+Enable the =presence-mode= minor mode to activate Discord Rich Presence for Emacs. When active, Emacs will communicate with your Discord client to display your status while you're editing files. You can further customize the appearance and behavior of the status using the configuration options mentioned above.
+
+** License
+
+=presence.el= is licensed under the MIT License. See the [[https://github.com/richardhbtz/emacs-presence/blob/master/LICENSE][LICENSE]] file for details.
+
+** Author
+
+- Author: richardhbtz
+- Contact: Richard Habitzreuter <richardhabitzreuter@icloud.com>
+
+** Links
+
+- GitHub Repository: [[https://github.com/richardhbtz/emacs-presence][https://github.com/richardhbtz/emacs-presence]]
+
+Enjoy seamlessly integrating Emacs with Discord's Rich Presence feature! If you have any questions or issues, feel free to reach out to the author via the provided contact information or open an issue on the GitHub repository.
