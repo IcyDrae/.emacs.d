@@ -48,6 +48,7 @@
 - [[#drag-stuff][Drag-stuff]]
 - [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
 - [[#minimap-on-the-side][Minimap on the side]]
+- [[#pdf-support][PDF support]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -1020,6 +1021,23 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
 
 (add-hook 'prog-mode-hook #'minimap-mode)
 #+end_src
+
+* PDF support
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page))
+
+(add-hook 'pdf-view-mode-hook 'pdf-roll-mode)
+#+end_src
+
+
+
+
+
 
 
 
