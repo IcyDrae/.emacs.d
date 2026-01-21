@@ -49,6 +49,7 @@
 - [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
 - [[#minimap-on-the-side][Minimap on the side]]
 - [[#pdf-support][PDF support]]
+- [[#reopen-most-recently-closed-file][Reopen most recently closed file]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -1034,6 +1035,15 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
 (add-hook 'pdf-view-mode-hook 'pdf-roll-mode)
 #+end_src
 
+* Reopen most recently closed file
+
+Usage: /M-x recentf-open-files/
+
+#+begin_src emacs-lisp
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 500)
+#+end_src
 
 
 
