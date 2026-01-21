@@ -26,6 +26,7 @@
 - [[#dashboard][Dashboard]]
 - [[#programming-languages-support][Programming languages support]]
   - [[#c-mode][C# Mode]]
+  - [[#php-mode][PHP mode]]
   - [[#git-diffs-on-the-side][Git diffs on the side]]
   - [[#origami-mode-folding-code][origami-mode (folding code)]]
 - [[#rainbow-delimiters][rainbow-delimiters]]
@@ -583,6 +584,14 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 
   (setq lsp-idle-delay 0.1)
   (setq lsp-diagnostics-provider :flymake)
+#+end_src
+
+** PHP mode
+
+#+begin_src emacs-lisp
+(use-package php-mode
+  :ensure t
+  :hook (php-mode . lsp))
 #+end_src
 
 ** Git diffs on the side
