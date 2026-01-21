@@ -47,6 +47,7 @@
 - [[#vterm][vterm]]
 - [[#drag-stuff][Drag-stuff]]
 - [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
+- [[#minimap-on-the-side][Minimap on the side]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -1002,7 +1003,23 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
 ; removes ^ or any initial regex in prompts
 #+end_src
 
+* Minimap on the side
 
+#+begin_src emacs-lisp
+(use-package minimap
+  :ensure t
+  :custom
+  (minimap-window-location 'right)
+  (minimap-width-fraction 0.1)
+  (minimap-hide-scroll-bar t)
+  (minimap-hide-fringes t)
+  (minimap-minimum-width 20)
+  (minimap-always-recenter t)
+  :bind
+  ("C-c m m" . minimap-mode))
+
+(add-hook 'prog-mode-hook #'minimap-mode)
+#+end_src
 
 
 
