@@ -1,0 +1,25 @@
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("vterm<2>"
+ (handler . vterm--bookmark-handler)
+ (thisdir . "~/")
+ (buf-name . "*vterm*<2>"))
+("*vterm*"
+ (handler . vterm--bookmark-handler)
+ (thisdir . "~/")
+ (buf-name . "*vterm*"))
+("Study Journal 3.org"
+ (filename . "~/data/notes/journals/study/Study Journal 3.org")
+ (front-context-string . "\n15 September 20")
+ (rear-context-string . "UP: show2levels\n")
+ (position . 107)
+ (last-modified 26998 34114 282691 781000))
+("Bullet Journal 7.org"
+ (filename . "~/data/notes/journals/Bullet Journal 7.org")
+ (front-context-string . "\nSeventh journal")
+ (rear-context-string . "UP: show5levels\n")
+ (position . 108)
+ (last-modified 26998 34107 83178 250000))
+)

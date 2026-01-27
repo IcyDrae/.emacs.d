@@ -16,6 +16,10 @@
  '(package-selected-packages nil)
  '(tab-bar-mode t))
 
+;; Disable menu bar
+(menu-bar-mode -1)
+;; Disable tool bar
+(tool-bar-mode -1)
 (setq display-time-day-and-date t)
 (setq display-time-format "%A, %d %B %Y, %H:%M")
 (display-time-mode 1)
@@ -44,6 +48,9 @@
 (presence-mode 1)
 ;; start presence-mode automatically
 (add-hook 'emacs-startup-hook #'presence-mode)
+
+;; Silently ignore unlock-file warnings
+(setq warning-suppress-types '((unlock-file)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

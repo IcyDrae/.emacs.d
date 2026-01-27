@@ -530,7 +530,6 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
 Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM, AWK, C, C++, Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, M4, Makefiles, Metafont, Modula2, Object Pascal, Objective-C, Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, SQL, Tcl, Verilog, and VHDL.  Other languages will require you to install additional modes.
 
 #+begin_src emacs-lisp
-  (use-package php-mode)
   (use-package haskell-mode)
   (use-package lua-mode)
 #+end_src
@@ -807,7 +806,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
     (interactive)
     (tab-new)  ;; Open a new tab
     (switch-to-buffer "*scratch*")
-    (neotree-dir "/Volumes/My Passport/data"))  ;; Show Neotree with E: drive
+    (neotree-dir "/home/reard/data"))  ;; Show Neotree with E: drive
 
   ;; Rebind C-x t 2 to open the new tab with Neotree
   (global-set-key (kbd "C-x t 2") 'open-new-tab-with-neotree)
@@ -1017,6 +1016,13 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
 * Minimap on the side
 
 #+begin_src emacs-lisp
+;; Tell Emacs that C-c m is a prefix first
+(define-prefix-command 'my-minimap-map)
+(global-set-key (kbd "C-c m") 'my-minimap-map)
+
+;; Now you can bind C-c m m safely
+(define-key my-minimap-map (kbd "m") 'minimap-mode)
+
 (use-package minimap
   :ensure t
   :custom
