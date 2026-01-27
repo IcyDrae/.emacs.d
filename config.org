@@ -550,6 +550,9 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     (lsp-ui-doc-enable t)
     (lsp-ui-sideline-enable t))
 
+  (setq lsp-auto-guess-root t)
+  (setq lsp-prefer-flymake nil)
+
   (with-eval-after-load 'dap-mode
     ;; don't let breakpoints react to mouse clicks in fringe
     (define-key dap-mode-map [left-fringe mouse-1] nil))
@@ -588,9 +591,31 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
 ** PHP mode
 
 #+begin_src emacs-lisp
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :init
+  (setq lsp-keymap-prefix "C-c l") ;; optional keybindings
+  (setq lsp-intelephense-server-command
+        '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio")))
+
 (use-package php-mode
   :ensure t
-  :hook (php-mode . lsp))
+  :hook (php-mode . lsp)) ;; start lsp automatically when opening PHP files
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode) ;; optional UI features
+
+(use-package company
+  :ensure t
+  :hook (php-mode . company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.0))
+
+(setq lsp-php-intelephense-files-associations ["*.php"])
+(setq lsp-php-intelephense-stubs ["apache" "bcmath" "bz2" "calendar" "Core" "curl" "date" "dom" "exif" "fileinfo" "filter" "ftp" "gd" "gettext" "hash" "iconv" "imap" "intl" "json" "ldap" "libxml" "mbstring" "mcrypt" "mysqli" "mysql" "openssl" "pcntl" "pcre" "PDO" "pdo_mysql" "Phar" "posix" "readline" "recode" "Reflection" "session" "SimpleXML" "soap" "sockets" "SPL" "sqlite3" "standard" "tokenizer" "xml" "xmlreader" "xmlrpc" "xmlwriter" "xsl" "zip" "zlib"])
 #+end_src
 
 ** Git diffs on the side
@@ -977,7 +1002,6 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
   ;; Bind the prefix to a global key
   (global-set-key (kbd "C-c") vlc-mode-map)
 #+end_src
-
 
 * vterm
 #+begin_src emacs-lisp

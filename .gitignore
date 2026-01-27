@@ -16,4 +16,6 @@ speed-type/
 eshell
 eln-cache
 session.*
+.cache
+lsp-cache
 
