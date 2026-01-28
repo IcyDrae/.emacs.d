@@ -1088,9 +1088,10 @@ Usage: /M-x recentf-open-files/
 * Beacon
 
 #+begin_src emacs-lisp
-(use-package beacon)
-
-(beacon-mode 1)
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1))
 #+end_src
 
 
