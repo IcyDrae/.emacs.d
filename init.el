@@ -52,6 +52,10 @@
 ;; Silently ignore unlock-file warnings
 (setq warning-suppress-types '((unlock-file)))
 
+(save-place-mode 1)
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
