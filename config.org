@@ -51,6 +51,7 @@
 - [[#minimap-on-the-side][Minimap on the side]]
 - [[#pdf-support][PDF support]]
 - [[#reopen-most-recently-closed-file][Reopen most recently closed file]]
+- [[#beacon][Beacon]]
 
 * First step
 Copy all the dependencies from the emacs-29-deps folder into the Emacs installation binary folder. Needed for image inline display support on Windows.
@@ -1084,7 +1085,13 @@ Usage: /M-x recentf-open-files/
 (setq recentf-max-menu-items 500)
 #+end_src
 
+* Beacon
 
+#+begin_src emacs-lisp
+(use-package beacon)
+
+(beacon-mode 1)
+#+end_src
 
 
 
