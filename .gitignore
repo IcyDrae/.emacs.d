@@ -18,4 +18,5 @@ eln-cache
 session.*
 .cache
 lsp-cache
+%backup%~
 
