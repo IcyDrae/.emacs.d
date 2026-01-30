@@ -820,7 +820,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
 #+begin_src emacs-lisp
   (require 'url)
-  
+
   (defun vlc-start ()
     "Start VLC with HTTP interface and dummy interface."
     (interactive)
@@ -843,7 +843,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 
   (defun vlc-play-file (file)
     "Play a media FILE using VLC."
-    (interactive (list (read-file-name "Select file: " "/Volumes/My\ Passport/data/audio/")))
+    (interactive (list (read-file-name "Select file: " "/home/reard/data/audio/")))
     (let* ((encoded-file (encode-url (expand-file-name file)))
            (short-title (if (> (length (file-name-nondirectory file)) 10)
                             (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
