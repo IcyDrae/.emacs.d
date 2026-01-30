@@ -24,6 +24,7 @@
 - [[#projects][Projects]]
 - [[#dashboard][Dashboard]]
 - [[#programming-languages-support][Programming languages support]]
+  - [[#yasnippet][Yasnippet]]
   - [[#c-mode--php-mode][C# Mode + PHP Mode]]
   - [[#php-mode][PHP mode]]
   - [[#git-diffs-on-the-side][Git diffs on the side]]
@@ -526,6 +527,16 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
 * Programming languages support
 Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM, AWK, C, C++, Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, M4, Makefiles, Metafont, Modula2, Object Pascal, Objective-C, Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, SQL, Tcl, Verilog, and VHDL.  Other languages will require you to install additional modes.
 
+** Yasnippet
+
+#+begin_src emacs-lisp
+;; Install and enable yasnippet
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))  ;; enable yasnippet everywhere
+#+end_src
+
 ** C# Mode + PHP Mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -537,7 +548,8 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     :init
     ; Start PHP mode as well
     (setq lsp-intelephense-server-command
-          '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio")))
+          '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio"))
+    (setq lsp-enable-snippet t))
 
   (use-package lsp-ui
     :after lsp-mode
