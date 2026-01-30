@@ -7,6 +7,7 @@
 * Table of contents :toc:
 - [[#important-programs-to-load-first][Important programs to load first]]
   - [[#elpaca-package-manager][Elpaca Package Manager]]
+- [[#add-melpa][Add MELPA]]
 - [[#fonts][Fonts]]
 - [[#which-key-package][which-key package]]
 - [[#org-mode][org-mode]]
@@ -28,6 +29,7 @@
   - [[#c-mode--php-mode][C# Mode + PHP Mode]]
   - [[#php-mode][PHP mode]]
   - [[#git-diffs-on-the-side][Git diffs on the side]]
+  - [[#debugging-mode][Debugging mode]]
   - [[#origami-mode-folding-code][origami-mode (folding code)]]
 - [[#rainbow-delimiters][rainbow-delimiters]]
 - [[#diminish][Diminish]]
@@ -107,6 +109,17 @@ Link: https://github.com/progfolio/elpaca
 
   ;; Block until current queue processed.
   (elpaca-wait)
+#+end_src
+
+* Add MELPA
+
+#+begin_src emacs-lisp
+(require 'package)
+
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+
+(package-initialize)
 #+end_src
 
 * Fonts
@@ -643,6 +656,27 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (when (buffer-file-name)
     (diff-hl-update)
     (message "Diff-HL refreshed!")))
+#+end_src
+
+** Debugging mode
+
+#+begin_src emacs-lisp
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :commands dap-debug
+  :config
+  (dap-auto-configure-mode)
+
+  ;; UI windows
+  (require 'dap-ui)
+  (dap-ui-mode 1)
+
+  ;; PHP
+  (require 'dap-php)
+
+  ;; C#
+  (require 'dap-netcore))
 #+end_src
 
 ** origami-mode (folding code)
