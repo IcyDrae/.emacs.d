@@ -533,7 +533,6 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     :hook ((csharp-mode . lsp))
     :custom
     (lsp-headerline-breadcrumb-enable nil)
-    (lsp-enable-snippet t)
     (lsp-idle-delay 0.5)
     :init
     ; Start PHP mode as well
