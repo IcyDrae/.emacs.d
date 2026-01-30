@@ -546,10 +546,10 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
     (lsp-headerline-breadcrumb-enable nil)
     (lsp-idle-delay 0.5)
     :init
+    (setq lsp-enable-snippet t)
     ; Start PHP mode as well
     (setq lsp-intelephense-server-command
-          '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio"))
-    (setq lsp-enable-snippet t))
+          '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio")))
 
   (use-package lsp-ui
     :after lsp-mode
