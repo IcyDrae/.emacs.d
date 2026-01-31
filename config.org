@@ -1053,13 +1053,6 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
 * Minimap on the side
 
 #+begin_src emacs-lisp
-;; Tell Emacs that C-c m is a prefix first
-(define-prefix-command 'my-minimap-map)
-(global-set-key (kbd "C-c m") 'my-minimap-map)
-
-;; Now you can bind C-c m m safely
-(define-key my-minimap-map (kbd "m") 'minimap-mode)
-
 (use-package minimap
   :ensure t
   :custom
@@ -1068,11 +1061,9 @@ Drag stuff is a minor mode for Emacs that makes it possible to drag stuff (words
   (minimap-hide-scroll-bar t)
   (minimap-hide-fringes t)
   (minimap-minimum-width 20)
-  (minimap-always-recenter t)
-  :bind
-  ("C-c m m" . minimap-mode))
+  (minimap-always-recenter t))
 
-(add-hook 'prog-mode-hook #'minimap-mode)
+(global-set-key (kbd "C-c m") #'minimap-mode)
 #+end_src
 
 * PDF support
