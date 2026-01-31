@@ -309,6 +309,8 @@ Ivy-rich allows us to add descriptions alongside the commands in M-x.
     :after ivy
     :config (counsel-mode))
 
+  (global-set-key (kbd "C-c f") #'counsel-rg)
+
   (use-package ivy
     :diminish
     :bind
