@@ -20,6 +20,10 @@
 (menu-bar-mode -1)
 ;; Disable tool bar
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
+;; Keep left fringe for diff-hl, shrink right fringe
+(set-fringe-mode '(8 . 0))  ;; left 8px, right 0px
+
 (setq display-time-day-and-date t)
 (setq display-time-format "%A, %d %B %Y, %H:%M")
 (display-time-mode 1)
