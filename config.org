@@ -42,13 +42,11 @@
 - [[#elfeed][elfeed]]
 - [[#minibuffer-escape-one-time][Minibuffer escape one time]]
 - [[#sane-defaults][Sane defaults]]
-- [[#multimedia][Multimedia]]
 - [[#touch-typing][Touch typing]]
 - [[#chronometer][chronometer]]
 - [[#islamic-prayer-times][Islamic prayer times]]
 - [[#custom-keybindings][Custom keybindings]]
   - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
-  - [[#vlc][VLC]]
   - [[#org-pomodoro-1][org-pomodoro]]
 - [[#vterm][vterm]]
 - [[#drag-stuff][Drag-stuff]]
@@ -225,9 +223,9 @@ Org-bullets gives us attractive bullets rather than asterisks.
     (setq org-pomodoro-log 'note)  ;; Logs a note with each Pomodoro session
     (setq org-pomodoro-finished-sound-p t)  ;; Enables the sound after a Pomodoro session
     (setq org-pomodoro-ticking-sound nil)  ;; Optional: Disable ticking sound if you don't want it
-    (setq org-pomodoro-finished-sound "/Users/rgj/.emacs.d/pomodoro-bell.wav")
-    (setq org-pomodoro-short-break-sound "/Users/rgj/.emacs.d/break-over-sound.wav")
-    (setq org-pomodoro-long-break-sound "/Users/rgj/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-finished-sound "/home/reard/.emacs.d/pomodoro-bell.wav")
+    (setq org-pomodoro-short-break-sound "/home/reard/.emacs.d/break-over-sound.wav")
+    (setq org-pomodoro-long-break-sound "/home/reard/.emacs.d/break-over-sound.wav")
 
     ;; Set the default times (optional)
     (setq org-pomodoro-length 50)  ;; Length of each Pomodoro session (in minutes)
@@ -967,87 +965,6 @@ The following settings are simple modes that are enabled (or disabled) so that E
   (global-set-key (kbd "C-x t 2") 'open-new-tab-with-neotree)
 #+end_src
 
-* Multimedia
-
-#+begin_src emacs-lisp
-  (require 'url)
-
-  (defun vlc-start ()
-    "Start VLC with HTTP interface and dummy interface."
-    (interactive)
-    (start-process "vlc" "*vlc*" "vlc" "-I" "dummy" "--extraintf" "http"
-                   "--http-host" "127.0.0.1" "--http-port" "8080"
-                   "--http-password" "1234"))
-
-  (defvar vlc-current-file nil
-    "The currently playing file in VLC.")
-
-  (defun encode-url (str)
-    "URL-encode a string STR for use in a URL."
-    ;; Use built-in url-encode-url if available, or just handle spaces
-    (let ((encoded (replace-regexp-in-string " " "%20" str))) 
-      ;; Encode additional special characters
-      (replace-regexp-in-string "&" "%26" 
-      (replace-regexp-in-string "?" "%3F" 
-      (replace-regexp-in-string "=" "%3D" 
-      (replace-regexp-in-string "+" "%2B" encoded))))))
-
-  (defun vlc-play-file (file)
-    "Play a media FILE using VLC."
-    (interactive (list (read-file-name "Select file: " "/home/reard/data/audio/")))
-    (let* ((encoded-file (encode-url (expand-file-name file)))
-           (short-title (if (> (length (file-name-nondirectory file)) 10)
-                            (concat (substring (file-name-nondirectory file) 0 15) "...") ; Get first 10 characters
-                          (file-name-nondirectory file)))) ; If it's 10 characters or less, use the full name
-      (setq vlc-current-file short-title) ; Update the currently playing file variable
-                                          ; (message "Playing file with URL: %s" (format "http://localhost:8080/requests/status.xml?command=in_play&input=file:///%s" encoded-file))
-      (vlc-status (format "?command=in_play&input=file:///%s" encoded-file))
-      (update-vlc-mode-line)
-  ))
-
-  (defun update-vlc-mode-line ()
-    (let ((new-info (if vlc-current-file
-                        (format "▶ %s" vlc-current-file)
-                      "")))
-      ;; Replace the last entry in mode-line-format with the new VLC info
-      (setf (nth (1- (length mode-line-format)) mode-line-format) new-info)))
-
-  (defun vlc-pause ()
-    (interactive)
-    (vlc-status "?command=pl_pause"))
-
-  (defun vlc-resume ()
-    (interactive)
-    (vlc-status "?command=pl_play"))
-
-  (defun vlc-stop ()
-    (interactive)
-    (setq vlc-current-file nil) ;; Clear the current file info
-    (vlc-status "?command=pl_stop")
-    (update-vlc-mode-line)
-  )
-
-  (defun vlc-volume (level)
-    "Set VLC volume to LEVEL (0-512)."
-    (interactive "nVolume Level (0-512): ")
-    (let ((url (format "?command=volume&val=%d" level)))
-      (vlc-status url)))
-
-  (defun vlc-status (endpoint)
-  "Get and display the current status of VLC in a readable format."
-  (interactive)
-  (let ((url (format "http://localhost:8080/requests/status.xml%s" endpoint)))
-    (with-temp-buffer
-      ;; Fetch the XML response from VLC
-      (call-process "curl" nil t nil "-u" ":1234" url)
-      (goto-char (point-min))
-      ;; Extract relevant data manually
-      (let ((state (if (re-search-forward "<state>\\([^<]+\\)</state>" nil t)
-                       (match-string 1)
-                     "Unknown")))
-      (message "VLC Status\nState: %s" state)))))
-#+end_src
-
 * Touch typing
 
 #+begin_src emacs-lisp
@@ -1101,36 +1018,19 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
   :ensure nil) ;; tell use-package not to try to install org-tempo since it's already there.
 #+end_src
 
-** VLC
-
-#+begin_src emacs-lisp
-  (defvar vlc-mode-map (make-sparse-keymap)
-    "Keymap for VLC commands.")
-
-  (define-key vlc-mode-map (kbd "P") 'vlc-play-file)
-  (define-key vlc-mode-map (kbd "s") 'vlc-stop)
-  (define-key vlc-mode-map (kbd "p") 'vlc-pause)
-  (define-key vlc-mode-map (kbd "r") 'vlc-resume)
-  (define-key vlc-mode-map (kbd "v") 'vlc-volume)
-  (define-key vlc-mode-map (kbd "S") 'vlc-status)
-  (define-key vlc-mode-map (kbd "l") 'vlc-start)
-
-  ;; Bind the prefix to a global key
-  (global-set-key (kbd "C-c") vlc-mode-map)
-
-  (global-set-key (kbd "C-c m") 'set-mark-command)
-#+end_src
-
 ** org-pomodoro
 
 #+begin_src emacs-lisp
-  (defvar org-pomodoro-mode-map (make-sparse-keymap)
-    "Keymap for org-pomodoro commands.")
+;; create prefix keymap
+(defvar reard-pomodoro-map (make-sparse-keymap)
+  "Prefix map for org-pomodoro.")
 
-  (define-key vlc-mode-map (kbd "op") 'org-pomodoro)
+;; bind prefix globally
+(global-set-key (kbd "C-c o") reard-pomodoro-map)
 
-  ;; Bind the prefix to a global key
-  (global-set-key (kbd "C-c") vlc-mode-map)
+;; bind commands inside it
+(with-eval-after-load 'org-pomodoro
+  (define-key reard-pomodoro-map (kbd "p") #'org-pomodoro))
 #+end_src
 
 * vterm
