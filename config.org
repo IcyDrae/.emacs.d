@@ -15,6 +15,7 @@
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#hide-org-indent][Hide org-indent]]
   - [[#org-pomodoro][org-pomodoro]]
+  - [[#plain-org--org-capture--backlinks][Plain Org + org-capture + backlinks]]
 - [[#theme][Theme]]
 - [[#rainbow-mode][Rainbow-mode]]
 - [[#icons][Icons]]
@@ -250,6 +251,27 @@ Org-bullets gives us attractive bullets rather than asterisks.
   )
 #+end_src
 
+** Plain Org + org-capture + backlinks
+
+#+begin_src emacs-lisp
+(setq org-capture-templates
+      '(("n" "New note anywhere"
+         entry
+         (file+headline
+          (lambda ()
+            (read-file-name "Save note in: " "~/data/notes/"))
+          "Inbox")
+         "* %?\nEntered on %U\n")))
+
+(setq org-directory "~/data/notes")
+
+(setq org-agenda-files
+      (directory-files-recursively "~/data/notes" "\\.org$"))
+
+(global-set-key (kbd "C-c c") #'org-capture)
+(global-set-key (kbd "C-c a") #'org-agenda)
+#+end_src
+
 * Theme
 
 #+begin_src emacs-lisp
@@ -266,7 +288,7 @@ Org-bullets gives us attractive bullets rather than asterisks.
   (doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;; for treemacs users
   :config
-  (load-theme 'doom-badger t)
+  (load-theme 'doom-laserwave t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
