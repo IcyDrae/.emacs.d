@@ -55,6 +55,7 @@
 - [[#pdf-support][PDF support]]
 - [[#reopen-most-recently-closed-file][Reopen most recently closed file]]
 - [[#beacon][Beacon]]
+- [[#emms-multimedia][EMMS (multimedia)]]
 
 * Important programs to load first
 ** Elpaca Package Manager
@@ -1112,6 +1113,32 @@ Usage: /M-x recentf-open-files/
   :ensure t
   :config
   (beacon-mode 1))
+#+end_src
+
+* EMMS (multimedia)
+
+#+begin_src emacs-lisp
+(use-package emms
+  :ensure t
+  :init
+  (require 'emms-setup)
+  :config
+  ;; Basic config
+  (emms-all)
+  (emms-default-players)
+
+  ;; Use mpv if available
+  (setq emms-player-list '(emms-player-mpv))
+
+  ;; Where your music lives
+  (setq emms-source-file-default-directory "~/data/audio/")
+
+  ;; Save playlists between sessions
+  (setq emms-playlist-buffer-name "*EMMS Playlist*")
+
+  ;; Show track info in modeline
+  (emms-mode-line-mode 1)
+  (emms-playing-time-mode 1))
 #+end_src
 
 
