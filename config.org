@@ -689,9 +689,7 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (lsp-idle-delay 0.5)
   (lsp-completion-provider :capf)
   :init
-  (setq lsp-enable-snippet t
-        lsp-intelephense-server-command
-        '("/home/reard/.nvm/versions/node/v24.13.0/bin/intelephense" "--stdio")))
+  (setq lsp-enable-snippet t))
 
 ;; Vue mode
 (use-package vue-mode
