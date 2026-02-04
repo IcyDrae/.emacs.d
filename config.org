@@ -985,6 +985,9 @@ The following settings are simple modes that are enabled (or disabled) so that E
     (move-to-column col)))
 
 (global-set-key (kbd "C-c d") #'reard/duplicate-line)
+
+;; Comment line or selected region
+(global-set-key (kbd "C-/") #'comment-line)
 #+end_src
 
 #+begin_src emacs-lisp
