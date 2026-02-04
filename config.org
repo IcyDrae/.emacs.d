@@ -5,8 +5,7 @@
 [[file:TomBombadil.jpg]]
 
 * Table of contents :toc:
-- [[#important-programs-to-load-first][Important programs to load first]]
-  - [[#elpaca-package-manager][Elpaca Package Manager]]
+- [[#elpaca-package-manager][Elpaca Package Manager]]
 - [[#add-melpa][Add MELPA]]
 - [[#fonts][Fonts]]
 - [[#which-key-package][which-key package]]
@@ -58,8 +57,7 @@
 - [[#beacon][Beacon]]
 - [[#emms-multimedia][EMMS (multimedia)]]
 
-* Important programs to load first
-** Elpaca Package Manager
+* Elpaca Package Manager
 Link: https://github.com/progfolio/elpaca
 
 #+begin_src emacs-lisp
