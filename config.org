@@ -969,6 +969,22 @@ The following settings are simple modes that are enabled (or disabled) so that E
 (global-visual-line-mode t)  ;; Enable truncated lines
 (setq org-edit-src-content-indentation 0) ;; Set src block automatic indent to 0 instead of 2.
 (setq display-time-default-load-average nil)
+
+(defun reard/duplicate-line ()
+  "Duplicate current line and move point to the duplicate, keeping column."
+  (interactive)
+  (let ((col (current-column)))
+    (save-excursion
+      (move-beginning-of-line 1)
+      (kill-line)
+      (yank)
+      (open-line 1)
+      (forward-line 1)
+      (yank))
+    (forward-line 1)
+    (move-to-column col)))
+
+(global-set-key (kbd "C-c d") #'reard/duplicate-line)
 #+end_src
 
 #+begin_src emacs-lisp
