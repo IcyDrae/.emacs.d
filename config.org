@@ -56,6 +56,7 @@
 - [[#reopen-most-recently-closed-file][Reopen most recently closed file]]
 - [[#beacon][Beacon]]
 - [[#emms-multimedia][EMMS (multimedia)]]
+- [[#breadcrumbs][Breadcrumbs]]
 
 * Elpaca Package Manager
 Link: https://github.com/progfolio/elpaca
@@ -1002,9 +1003,9 @@ The following settings are simple modes that are enabled (or disabled) so that E
 #+end_src
 
 * Touch typing
+Run 'speed-type-text'
 
 #+begin_src emacs-lisp
-  ;; Run 'speed-type-text'
   (use-package speed-type)
 #+end_src
 
@@ -1176,4 +1177,18 @@ Usage: /M-x recentf-open-files/
   (emms-playing-time-mode 1))
 #+end_src
 
+* Breadcrumbs
+
+#+begin_src emacs-lisp
+(setq which-func-display nil)
+(which-function-mode 1)
+
+(setq-default header-line-format
+              '(:eval
+                (when buffer-file-name
+                  (list
+                   (abbreviate-file-name buffer-file-name)
+                   "::"
+                   which-func-current))))
+#+end_src
 
