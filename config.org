@@ -287,7 +287,7 @@ Org-bullets gives us attractive bullets rather than asterisks.
   (doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;; for treemacs users
   :config
-  (load-theme 'doom-one t)
+  (load-theme 'doom-gruvbox t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
