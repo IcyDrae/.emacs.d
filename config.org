@@ -49,6 +49,7 @@
   - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
   - [[#org-pomodoro-1][org-pomodoro]]
   - [[#searching-globally][Searching globally]]
+  - [[#auto-highlight-references-under-cursor][Auto highlight references under cursor]]
 - [[#vterm][vterm]]
 - [[#drag-stuff][Drag-stuff]]
 - [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
@@ -1077,6 +1078,12 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
 (global-set-key (kbd "C-c f") #'counsel-rg)
 (global-set-key (kbd "C-c p f") #'projectile-find-file)
 (global-set-key (kbd "C-c r") #'lsp-find-references)
+#+end_src
+
+** Auto highlight references under cursor
+
+#+begin_src emacs-lisp
+(setq lsp-enable-symbol-highlighting t)
 #+end_src
 
 * vterm
