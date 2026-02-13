@@ -48,6 +48,7 @@
 - [[#custom-keybindings][Custom keybindings]]
   - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
   - [[#org-pomodoro-1][org-pomodoro]]
+  - [[#searching-globally][Searching globally]]
 - [[#vterm][vterm]]
 - [[#drag-stuff][Drag-stuff]]
 - [[#minibuffer-cursor-caret-remove-and-make-minibuffer-cursor-a-block][Minibuffer cursor caret remove and make minibuffer cursor a block]]
@@ -1068,6 +1069,12 @@ Org-tempo is a package that allows for '<s' followed by TAB to expand to a begin
 ;; bind commands inside it
 (with-eval-after-load 'org-pomodoro
   (define-key reard-pomodoro-map (kbd "p") #'org-pomodoro))
+#+end_src
+
+** Searching globally
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c f") #'counsel-rg)
 #+end_src
 
 * vterm
