@@ -13,7 +13,7 @@
  '(initial-frame-alist '((fullscreen . maximized)))
  '(line-number-mode nil)
  '(minibuffer-frame-alist nil)
- '(package-selected-packages nil)
+ '(package-selected-packages '(0blayout magit))
  '(tab-bar-mode t))
 
 ;; Disable menu bar
@@ -65,6 +65,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(lsp-face-highlight-read ((t (:background "#3e4451"))))
+ '(lsp-face-highlight-write ((t (:background "#5c6370")))))
 
 
