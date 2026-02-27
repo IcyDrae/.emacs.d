@@ -59,6 +59,7 @@
 - [[#beacon][Beacon]]
 - [[#emms-multimedia][EMMS (multimedia)]]
 - [[#breadcrumbs][Breadcrumbs]]
+- [[#indentation-guides][Indentation guides]]
 
 * Elpaca Package Manager
 Link: https://github.com/progfolio/elpaca
@@ -1210,5 +1211,22 @@ Usage: /M-x recentf-open-files/
                    (abbreviate-file-name buffer-file-name)
                    "::"
                    which-func-current))))
+#+end_src
+
+* Indentation guides
+
+#+begin_src emacs-lisp
+(use-package indent-bars
+  :ensure t
+  :hook (prog-mode . indent-bars-mode)
+  :config
+  ;; Make bars visible
+  (setq indent-bars-color-by-depth nil)
+
+  ;; Optional: make them slightly thinner
+  (setq indent-bars-width-frac 0.1)
+
+  ;; Optional: only show in indentation (cleaner look)
+  (setq indent-bars-display-on-blank-lines nil))
 #+end_src
 
