@@ -60,6 +60,7 @@
 - [[#emms-multimedia][EMMS (multimedia)]]
 - [[#breadcrumbs][Breadcrumbs]]
 - [[#indentation-guides][Indentation guides]]
+- [[#rest-client][REST client]]
 
 * Elpaca Package Manager
 Link: https://github.com/progfolio/elpaca
@@ -967,7 +968,7 @@ The following settings are simple modes that are enabled (or disabled) so that E
 (electric-pair-mode 1)       ;; Turns on automatic parens pairing
 (global-auto-revert-mode t)  ;; Automatically show changes if the file has changed
 (global-display-line-numbers-mode 1) ;; Display line numbers
-;(setq display-line-numbers 'relative)
+(setq display-line-numbers 'relative)
 (global-visual-line-mode t)  ;; Enable truncated lines
 (setq org-edit-src-content-indentation 0) ;; Set src block automatic indent to 0 instead of 2.
 (setq display-time-default-load-average nil)
@@ -1229,4 +1230,21 @@ Usage: /M-x recentf-open-files/
   ;; Optional: only show in indentation (cleaner look)
   (setq indent-bars-display-on-blank-lines nil))
 #+end_src
+
+* REST client
+
+#+begin_src emacs-lisp
+(use-package restclient
+  :ensure t
+  :mode ("\\.http\\'" . restclient-mode))
+
+(use-package restclient-jq
+  :ensure t
+  :after restclient)
+#+end_src
+
+
+
+
+
 

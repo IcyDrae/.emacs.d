@@ -13,7 +13,7 @@
  '(initial-frame-alist '((fullscreen . maximized)))
  '(line-number-mode nil)
  '(minibuffer-frame-alist nil)
- '(package-selected-packages '(0blayout magit))
+ '(package-selected-packages '(0blayout magit racket-mode))
  '(tab-bar-mode t))
 
 ;; Disable menu bar
