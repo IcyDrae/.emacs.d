@@ -815,7 +815,10 @@ Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM,
   (require 'dap-php)
 
   ;; C#
-  (require 'dap-netcore))
+  (require 'dap-netcore)
+
+  ;; Node.js
+  (require 'dap-node))
 #+end_src
 
 ** origami-mode (folding code)
